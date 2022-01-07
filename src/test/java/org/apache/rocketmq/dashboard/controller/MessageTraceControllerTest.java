@@ -22,7 +22,6 @@ import org.apache.rocketmq.client.QueryResult;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.trace.TraceType;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.apache.rocketmq.common.topic.TopicValidator;
 import org.apache.rocketmq.dashboard.service.impl.MessageServiceImpl;
 import org.apache.rocketmq.dashboard.service.impl.MessageTraceServiceImpl;
 import org.apache.rocketmq.dashboard.util.MockObjectUtil;
@@ -57,13 +56,13 @@ public class MessageTraceControllerTest extends BaseControllerTest {
     @Before
     public void init() throws MQClientException, InterruptedException {
         super.mockRmqConfigure();
-        when(configure.getMsgTrackTopicNameOrDefault()).thenReturn(TopicValidator.RMQ_SYS_TRACE_TOPIC);
         List<MessageExt> messageList = new ArrayList<>(2);
         MessageExt messageExt = MockObjectUtil.createMessageExt();
         messageExt.setBody(MockObjectUtil.createTraceData().getBytes());
         messageList.add(messageExt);
         QueryResult queryResult = new QueryResult(System.currentTimeMillis(), messageList);
         when(mqAdminExt.queryMessage(anyString(), anyString(), anyInt(), anyLong(), anyLong()))
+            .thenThrow(new RuntimeException())
             .thenReturn(queryResult);
     }
 
@@ -102,6 +101,11 @@ public class MessageTraceControllerTest extends BaseControllerTest {
         final String url = "/messageTrace/viewMessageTraceDetail.query";
         requestBuilder = MockMvcRequestBuilders.get(url);
         requestBuilder.param("msgId", "0A9A003F00002A9F0000000000000319");
+        // query message trace exception
+        perform = mockMvc.perform(requestBuilder);
+        performErrorExpect(perform);
+
+        // query message trace success
         perform = mockMvc.perform(requestBuilder);
         perform.andExpect(status().isOk())
             .andExpect(jsonPath("$.data", hasSize(4)))
@@ -116,6 +120,11 @@ public class MessageTraceControllerTest extends BaseControllerTest {
         final String url = "/messageTrace/viewMessageTraceGraph.query";
         requestBuilder = MockMvcRequestBuilders.get(url);
         requestBuilder.param("msgId", "0A9A003F00002A9F0000000000000319");
+        // query message trace exception
+        perform = mockMvc.perform(requestBuilder);
+        performErrorExpect(perform);
+
+        // query message trace success
         perform = mockMvc.perform(requestBuilder);
         perform.andExpect(status().isOk())
             .andExpect(jsonPath("$.data").isMap())

@@ -16,9 +16,9 @@
  */
 package org.apache.rocketmq.dashboard.config;
 
+import com.google.common.base.Splitter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.MixAll;
-import org.apache.rocketmq.common.topic.TopicValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
 import java.io.File;
+import java.util.List;
 
 import static org.apache.rocketmq.client.ClientConfig.SEND_MESSAGE_WITH_VIP_CHANNEL_PROPERTY;
 
@@ -48,8 +49,6 @@ public class RMQConfigure {
 
     private boolean enableDashBoardCollect;
 
-    private String msgTrackTopicName;
-
     private boolean loginRequired = false;
 
     private String accessKey;
@@ -59,6 +58,8 @@ public class RMQConfigure {
     private boolean useTLS = false;
 
     private Long timeoutMillis;
+
+    private String namesrvAddrs;
 
     public String getAccessKey() {
         return accessKey;
@@ -78,6 +79,20 @@ public class RMQConfigure {
 
     public String getNamesrvAddr() {
         return namesrvAddr;
+    }
+
+    public String getNamesrvAddrs() {
+        return namesrvAddrs;
+    }
+
+    public void setNamesrvAddrs(String namesrvAddrs) {
+        if (StringUtils.isNotBlank(namesrvAddrs)) {
+            this.namesrvAddrs = namesrvAddrs;
+            List<String> nameSrvAddrList = Splitter.on("@").splitToList(this.namesrvAddrs);
+            if (!nameSrvAddrList.isEmpty()) {
+                this.setNamesrvAddr(nameSrvAddrList.get(0));
+            }
+        }
     }
 
     public void setNamesrvAddr(String namesrvAddr) {
@@ -121,17 +136,6 @@ public class RMQConfigure {
 
     public void setEnableDashBoardCollect(String enableDashBoardCollect) {
         this.enableDashBoardCollect = Boolean.valueOf(enableDashBoardCollect);
-    }
-
-    public String getMsgTrackTopicNameOrDefault() {
-        if (StringUtils.isEmpty(msgTrackTopicName)) {
-            return TopicValidator.RMQ_SYS_TRACE_TOPIC;
-        }
-        return msgTrackTopicName;
-    }
-
-    public void setMsgTrackTopicName(String msgTrackTopicName) {
-        this.msgTrackTopicName = msgTrackTopicName;
     }
 
     public boolean isLoginRequired() {

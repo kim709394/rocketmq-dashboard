@@ -21,8 +21,8 @@ var en = {
     "NO": "NO.",
     "ADDRESS": "Address",
     "VERSION": "Version",
-    "PRO_MSG_TPS": "Produce Massage TPS",
-    "CUS_MSG_TPS": "Consumer Massage TPS",
+    "PRO_MSG_TPS": "Produce Message TPS",
+    "CUS_MSG_TPS": "Consumer Message TPS",
     "YESTERDAY_PRO_COUNT": "Yesterday Produce Count",
     "YESTERDAY_CUS_COUNT": "Yesterday Consume Count",
     "TODAY_PRO_COUNT": "Today Produce Count",
@@ -41,6 +41,7 @@ var en = {
     "RESEND_MESSAGE":"Resend Message",
     "VIEW_EXCEPTION":"View Exception",
     "MESSAGETRACE":"MessageTrace",
+    "DLQ_MESSAGE":"DLQMessage",
     "COMMIT": "Commit",
     "OPERATION": "Operation",
     "ADD": "Add",
@@ -105,5 +106,12 @@ var en = {
     "NO_DATA":"Don't have ",
     "SYSTEM":"SYSTEM",
     "WELCOME":"Hi, welcome using RocketMQ Dashboard",
-    "ENABLE_MESSAGE_TRACE":"Enable Message Trace"
+    "ENABLE_MESSAGE_TRACE":"Enable Message Trace",
+    "MESSAGE_TRACE_DETAIL":"Message Trace Detail",
+    "TRACE_TOPIC":"TraceTopic",
+    "SELECT_TRACE_TOPIC":"selectTraceTopic",
+    "EXPORT": "export",
+    "NO_MATCH_RESULT": "no match result",
+    "BATCH_RESEND": "batchReSend",
+    "BATCH_EXPORT": "batchExport"
 }

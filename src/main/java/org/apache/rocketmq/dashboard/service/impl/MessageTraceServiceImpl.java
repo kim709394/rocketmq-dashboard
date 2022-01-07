@@ -20,8 +20,6 @@ package org.apache.rocketmq.dashboard.service.impl;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import com.google.common.base.Throwables;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +31,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.trace.TraceType;
 import org.apache.rocketmq.common.Pair;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.topic.TopicValidator;
 import org.apache.rocketmq.dashboard.config.RMQConfigure;
+import org.apache.rocketmq.dashboard.exception.ServiceException;
 import org.apache.rocketmq.dashboard.model.MessageTraceView;
 import org.apache.rocketmq.dashboard.model.trace.ProducerNode;
 import org.apache.rocketmq.dashboard.model.trace.MessageTraceGraph;
@@ -65,7 +65,7 @@ public class MessageTraceServiceImpl implements MessageTraceService {
 
     @Override
     public List<MessageTraceView> queryMessageTraceKey(String key) {
-        String queryTopic = configure.getMsgTrackTopicNameOrDefault();
+        String queryTopic = TopicValidator.RMQ_SYS_TRACE_TOPIC;
         logger.info("query data topic name is:{}", queryTopic);
         return queryMessageTraceByTopicAndKey(queryTopic, key);
     }
@@ -81,13 +81,16 @@ public class MessageTraceServiceImpl implements MessageTraceService {
             }
             return messageTraceViews;
         } catch (Exception err) {
-            throw Throwables.propagate(err);
+            throw new ServiceException(-1, String.format("Failed to query message trace by msgId %s", key));
         }
     }
 
     @Override
-    public MessageTraceGraph queryMessageTraceGraph(String key) {
-        List<MessageTraceView> messageTraceViews = queryMessageTraceKey(key);
+    public MessageTraceGraph queryMessageTraceGraph(String key, String topic) {
+        if (StringUtils.isEmpty(topic)) {
+            topic = TopicValidator.RMQ_SYS_TRACE_TOPIC;
+        }
+        List<MessageTraceView> messageTraceViews = queryMessageTraceByTopicAndKey(topic, key);
         return buildMessageTraceGraph(messageTraceViews);
     }
 

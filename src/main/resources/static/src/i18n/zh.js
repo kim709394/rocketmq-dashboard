@@ -39,8 +39,9 @@ var zh = {
     "PRODUCER":"生产者",
     "MESSAGE":"消息",
     "MESSAGE_DETAIL":"消息详情",
-    "RESEND_MESSAGE":"重新消费",
+    "RESEND_MESSAGE":"重新发送",
     "VIEW_EXCEPTION":"查看异常",
+    "DLQ_MESSAGE":"死信消息",
     "MESSAGETRACE":"消息轨迹",
     "OPERATION": "操作",
     "ADD": "新增",
@@ -106,5 +107,12 @@ var zh = {
     "NO_DATA":"不存在 ",
     "SYSTEM":"系统",
     "WELCOME":"您好，欢迎使用RocketMQ仪表盘",
-    "ENABLE_MESSAGE_TRACE":"开启消息轨迹"
+    "ENABLE_MESSAGE_TRACE":"开启消息轨迹",
+    "MESSAGE_TRACE_DETAIL":"消息轨迹详情",
+    "TRACE_TOPIC":"消息轨迹主题",
+    "SELECT_TRACE_TOPIC":"选择消息轨迹主题",
+    "EXPORT": "导出",
+    "NO_MATCH_RESULT": "没有查到符合条件的结果",
+    "BATCH_RESEND": "批量重发",
+    "BATCH_EXPORT": "批量导出"
 }
